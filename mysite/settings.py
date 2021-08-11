@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],     # 보통 이것만 변경 하는데 DIRS는 프로젝트 템플릿 파일이 위치할 디렉터리를 지정한다.
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],     # 보통 이것만 변경 하는데 DIRS는 프로젝트 템플릿 파일이 위치할 디렉터리를 지정한다.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
