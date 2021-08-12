@@ -22,6 +22,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('bookmark/', include('bookmark.urls')),
+    # path('bookmark/<int:pk>/', include('bookmark.urls')),
     path('blog/', include('blog.urls')),
 
     # class-based views

@@ -6,4 +6,4 @@ class Bookmark(models.Model):
     url = models.URLField('URL', unique=True)
 
     def __str__(self):
-        return f"{self.title} and {self.url}"
+        return self.title
