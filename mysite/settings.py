@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookmark.apps.BookmarkConfig',
     'blog.apps.BlogConfig',
+    "taggit.apps.TaggitAppConfig",
+    "taggit_templatetags2",
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,9 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TAGGIT_CASE_INSENSITIVE = True  # 태그 이름에 대소문자를 구분하지 않는다.
+TAGGIT_LIMIT = 50   # 최대 태그 개수 지정

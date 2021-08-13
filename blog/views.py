@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView,\
                                        DayArchiveView, TodayArchiveView
 from blog.models import Post
@@ -19,7 +19,6 @@ class PostDV(DetailView):
 
 class PostAV(ArchiveIndexView):
     model = Post
-    # template_name = 'blog/post_archive.html'
     date_field = 'modify_dt'
 
 
@@ -44,3 +43,19 @@ class PostTAV(TodayArchiveView):
     # template_name = 'blog/post_archive_day.html'
     date_field = 'modify_dt'
 
+
+class TagCloudTV(TemplateView):
+    template_name = 'taggit/taggit_cloud.html'
+
+
+class TaggingObjectLV(ListView):
+    model = Post
+    template_name = 'taggit/taggit_post_list.html'
+
+    def get_queryset(self):
+        return Post.objects.filter(tags_name=self.kwargs.get('tag'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tagname'] = self.kwargs['tag']
+        return context
