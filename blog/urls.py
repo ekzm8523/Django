@@ -31,6 +31,6 @@ urlpatterns = [
     path('tag/', views.TagCloudTV.as_view(), name='tag_cloud'),
 
     # /blog/tag/tagname/
-    path('tag/<str:tag>/', views.TaggingObjectLV.as_view(), name='tagged_object_list'),
+    path('tag/<str:tag>/', views.TaggedObjectLV.as_view(), name='tagged_object_list'),
 
 ]

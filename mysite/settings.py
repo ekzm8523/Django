@@ -139,3 +139,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TAGGIT_CASE_INSENSITIVE = True  # 태그 이름에 대소문자를 구분하지 않는다.
 TAGGIT_LIMIT = 50   # 최대 태그 개수 지정
+
+DISQUS_SHORTNAME = 'pydjango-web-programming-5hrijpoloy'
+DISQUS_MY_DOMAIN = 'http://127.0.0.1:8000/'
