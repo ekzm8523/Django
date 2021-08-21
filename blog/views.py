@@ -2,6 +2,11 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView,\
                                        DayArchiveView, TodayArchiveView
+from django.views.generic import FormView
+from blog.forms import PostSearchForm
+from django.db.models import Q
+from django.shortcuts import render
+
 from blog.models import Post
 from django.conf import settings
 # Create your views here.
@@ -68,3 +73,34 @@ class TaggedObjectLV(ListView):
         context = super().get_context_data(**kwargs)
         context['tagname'] = self.kwargs['tag']
         return context
+
+
+class SearchFormView(FormView):
+    """
+    FormView 제네릭 뷰는 GET 요청인 경우 폼을 화면에 보여주고 사용자의 입력을 기다린다.
+    사용자가 폼에 데이터를 입력한 후 제출하면 이는 POST 요청으로 접수되며 FormView 클래스는 데이터에 대한 유효성 검사를 한다.
+    데이터가 유효하지 않으면 form_valid() 함수를 실행한 후에 적절한 URL로 리다이렉트 시키는 기능을 가진다.
+    """
+    from_class = PostSearchForm
+    template_name = 'blog/post_search.html'
+
+    def form_valid(self, form):
+        searchWord = form.cleaned_data['search_word']   # search_word는 froms.PostSearchForm 클래스에서 정의한 필드네임
+
+        post_list = Post.objects.filter(
+            Q(title__icontains=searchWord) |    # icontains -> 대소문자 구별 X
+            Q(description__icontains=searchWord) |
+            Q(content__icontains=searchWord)
+        ).distinct()    # 중복 제거
+        # Post 테이블의 모든 레코드에 대해 title, description, content 컬럼에 searchWord가 포함된 레코드를 대소문자 구별 없이 검색하고
+        # 서로 다른 레코드들만 리스트로 만들어서 post_list에 저장한다.
+
+        context = {}
+        context['form'] = form
+        context['search_term'] = searchWord
+        context['object_list'] = post_list
+
+        # render()는 템플릿 파일과 컨텍스트 변수를 처리해 최종적으로 HttpResponse 객체를 반환한다.
+        # form_valid() 메서드는 보통 리다이렉트 처리를 위해 HttpResponseRedirect 객체를 반환한다.
+        # 여기서는 form_valid를 재정의 하여 render 함수를 사용함으로써 HttpResponse 객체를 반환한다. 즉 redirect 처리가 되지 않는다.
+        return render(self.request, self.template_name, context)
